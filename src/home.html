@@ -1,0 +1,49 @@
+<html>
+    <head>
+        <title>Paragon</title>
+        <script src="script.js"></script>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <table id="table-main" class="table">
+            <tr id="table-header">
+                <th class="table-header-cell">LP.</th>
+                <th class="table-header-cell">Nazwa</th>
+                <th class="table-header-cell">Cena</th>
+                <th class="table-header-cell">Ilość</th>
+                <th class="table-header-cell">Całkowity koszt</th>
+                <th class="table-header-cell">Działania</th>
+            </tr>
+            <tr id="table-row-add">
+                <td>
+                    
+                </td>
+                <td>
+                    <input class="table-add-text" id="text-add-name">
+                </td>
+                <td>
+                    <input class="table-add-text" id="text-add-price">
+                </td>
+                <td>
+                    <input class="table-add-text" id="text-add-amount">
+                </td>
+                <td>
+                    <p id="text-add-cost" hidden>Wprowadzono niepoprawne dane! Popraw i zatwierdź ponownie</p> 
+                </td>
+                <td>
+                    <span>
+                        <input type = "button" style="margin-right: 10px;" value="Dodaj" id="text-submit">
+                        <input type = "button" style="margin-right: 10px;" value="Aktualizuj" id="text-update" hidden>
+                        <input type = "button" style="margin-right: 10px;"  value="Anuluj" id="text-update-cancel" hidden>
+                    </span>
+                </td>
+            </tr>
+            <tr id="table-footer">
+                <td class="table-cell table-footer-right" colspan="4" >Suma</td>
+                <td class="table-cell table-footer-left " colspan="2" id = "field_sum"></td>
+            </tr>
+        
+
+        </table>
+    </body>
+</html>
