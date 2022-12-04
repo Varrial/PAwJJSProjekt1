@@ -1,24 +1,4 @@
-let storage = [{
-    lp: 10,
-    name: "nazwa4",
-    price: 123,
-    amount: 103
-}, {
-    lp: 20,
-    name: "nazwa3",
-    price: 23,
-    amount: 102
-}, {
-    lp: 20,
-    name: "nazwa2",
-    price: 13,
-    amount: 1011
-}, {
-    lp: 20,
-    name: "nazwa1",
-    price: 1,
-    amount: 101
-}];
+let storage = [];
 
 function update(){
     // wyczyszczenie listy
@@ -57,7 +37,6 @@ function generateNewRowByObject(element){
     let tdControlls = document.createElement("td")
 
     //ustawienie poprawnych wartości pobranych z elementu
-
     tdLp.innerHTML = element.lp
     tdName.innerHTML = element.name
     tdPrice.innerHTML = element.price
@@ -78,7 +57,8 @@ function generateNewRowByObject(element){
     tr.id = "element-number-"+element.lp
 
     // Dodanie do widoku
-    addTableCellAsLast(tr)
+    let pointer = document.getElementById("table-row-add")
+    pointer.parentElement.insertBefore(tr, pointer)
 
     tr.appendChild(tdLp)
     tr.appendChild(tdName)
@@ -95,23 +75,18 @@ function generateNewRowByObject(element){
 
         let index = parseInt(tr.children[0].innerHTML) 
         if(event.target.value==up){
-            console.log("UP"+index)
             if(index == 1) return
             swapElementsByIndexes(index-1,index-2)
-            console.log("swaped"+index-1+""+index-2)
-            pushStorageToLocalStorage()
+            updateLocalStorage()
             update()
         }
         else if(event.target.value==down){
-            console.log("DOWN"+index)
             if(index == storage.length) return
             swapElementsByIndexes(index-1,index)
-            console.log("swaped"+index-1+""+index)
-            pushStorageToLocalStorage()
+            updateLocalStorage()
             update()
         }
         else if(event.target.value==edit){
-            console.log("EDIT"+index)
             let element = storage[index-1]
             storage.splice(index-1,1)
             update()
@@ -133,9 +108,8 @@ function generateNewRowByObject(element){
 
         }
         else if(event.target.value==del){
-            console.log("DEL"+index)
             storage.splice(index-1,1)
-            pushStorageToLocalStorage()
+            updateLocalStorage()
             update()
         }
       }
@@ -156,7 +130,6 @@ function cancelButtonOnClick(element){
 
     storage.push(element)
     update()
-    console.log(element)
     clearAddForm()
 }
 
@@ -199,75 +172,43 @@ function getControlsDiv(){
     return span    
 }
 
-function addTableCellAsLast(tableCellElement){
-    let pointer = document.getElementById("table-row-add")
-    pointer.parentElement.insertBefore(tableCellElement,pointer)
-}
-
-
-
-function addButtonInit(){
-    let button = document.getElementById("text-submit")
-    button.onclick =addButtonOnCLickListener 
-}
-
 function addButtonOnCLickListener(){
     let newObject = {}
     newObject.name = document.getElementById("text-add-name").value
     newObject.price = document.getElementById("text-add-price").value
     newObject.amount = document.getElementById("text-add-amount").value
 
-    console.log(newObject)
+    // sprawdzenie poprawności danych w obiekcie
+    if (newObject.price.length === 0 ||
+        newObject.amount.length === 0) {
 
-    newObject = checkCorrectnessOfObject(newObject)
+        newObject = false
+        alert("Wprowadzono błędne dane!")
+    } else {
+        newObject.price = parseFloat(newObject.price)
+        newObject.amount=parseFloat(newObject.amount)
+    }
 
+
+    if (newObject.name.length === 0 ||
+        newObject.price<=0 ||
+        !((Math.round(newObject.price*100)/100) === newObject.price) ||
+        newObject.amount <=0) {
+
+        newObject = false
+        alert("Wprowadzono błędne dane!")
+    }
+
+    // dodanie obiektu
     if(newObject){
-        hideAddingError()
         storage.push(newObject)
-        pushStorageToLocalStorage()
+        updateLocalStorage()
         update()
         clearAddForm()
-
     }
-    else{
-        showAddingError()
-    }
-
 }
 
-function showAddingError(){
-    alert("Wprowadzono niepoprawne dane do paragonu! Sprawdź czy dane są wprowadzone w poprawnym formacie, nie są ujemne lub równe 0.");
-}
-
-function hideAddingError(){
-    ;
-}
-
-function checkCorrectnessOfObject(object){
-    if(object.name.length==0 ) return false
-    
-    if(object.price.length==0) return false
-    object.price = parseFloat(object.price)
-    if(object.price<=0) return false
-    if(checkPrecision(object.price)==false) return false
-
-    if(object.amount.length == 0) return false;
-    object.amount=parseFloat(object.amount)
-    if(object.amount <=0) return false
-
-
-    return object
-}
-
-function checkPrecision(float){
-    return ((Math.round(float*100)/100)==float)
-}
-
-function pullStorageFromLocalStorage(){
-    storage = JSON.parse(localStorage["storage"] || "[]")
-}
-
-function pushStorageToLocalStorage(){
+function updateLocalStorage(){
     localStorage["storage"] = JSON.stringify(storage)
 }
 
@@ -278,7 +219,13 @@ function clearAddForm(){
 }
 
 window.onload = function (){
-    addButtonInit()
-    pullStorageFromLocalStorage()
+    // inicjalizacja przycisku dodawania
+    let button = document.getElementById("text-submit")
+    button.onclick = addButtonOnCLickListener
+
+    // pobranie danych z local storage
+    storage = JSON.parse(localStorage["storage"] || "[]")
+
+    // aktualizacja widoku
     update()
 }
