@@ -1,54 +1,104 @@
-*{
-    font-family: "Comic Sans MS";
+body {
+    color: #001028;
+    background: #FFFFFF;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-family: Arial;
+    max-width: 1000px;
+    margin-left:auto;
+    margin-right:auto;
+}
+header {
+    padding: 10px 0;
+    margin-bottom: 30px;
+}
+h1 {
+    border-top: 1px solid  #5D6975;
+    border-bottom: 1px solid  #5D6975;
+    color: #5D6975;
+    font-size: 2.4em;
+    line-height: 1.4em;
+    font-weight: normal;
+    text-align: center;
+    margin-top: 0;
 }
 
-td{
-    border: 1px solid #ddd;
-    margin:0px;
-    padding: 7px;
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin-bottom: 20px;
 }
+table th {
+    padding: 5px 20px;
+    color: #5D6975;
+    border-bottom: 1px solid #C1CED9;
+    white-space: nowrap;
+    font-weight: normal;
+}
+
+
+
 #table-main tr:nth-child(even){
     background-color: #f2f2f2;
 
 }
-#table-main{
-    width: 100%;
-}
-/* #table-main tr:hover {
-    background-color: #ddd;
-} */
+
 #table-main th {
     padding: 3px;
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: left;
-    background-color: rgb(31, 30, 30);
-    color: rgb(211, 211, 211);
+    font-size: 1.2em;
+
 }
 
-#table-header{
-    
-    
-    /* border:0px solid #fff; */
+span input {
+    margin-left: 10px;
+}
+
+#table-main td {
     padding: 3px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    font-size: 1.2em;
+
 }
-.table{
-    border-collapse: collapse;
-    
-}
+
 .table-footer-right{
-
     text-align: right;
-    font-weight: bold;
-}
-.table-footer-left{
 
-    text-align: left;
-    font-weight: bold;
 }
 
-.table-add-text{
-    width:120px;
-    min-width: 0px;
+.control-buttons{
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    border: none;
+    color: green;
 }
 
+#button-edit{
+    background: url(Icons/edit.png) no-repeat;
+    background-size: 30px;
+}
+
+#button-delete{
+    background: url(Icons/delete.png) no-repeat;
+    background-size: 30px;
+}
+
+#button-up{
+    background: url(Icons/up.png) no-repeat;
+    background-size: 30px;
+}
+
+#button-down{
+    background: url(Icons/down.png) no-repeat;
+    background-size: 30px;
+}
+
+#button-add{
+    background: url(Icons/add.png) no-repeat;
+    background-size: 30px;
+}

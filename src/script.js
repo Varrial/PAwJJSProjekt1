@@ -12,20 +12,19 @@ function update(){
 
     // wygenerowanie nowej listy z storage
     storage.forEach(element=>{
-        generateNewRowByObject(element)
+        createRow(element)
     })
 
     // ustawienie sumy
-    let sum
-    if(storage.length === 0) {
-        sum = 0.0
-    } else {
+    let sum = 0.0
+    if(storage.length !== 0) {
         sum = storage.map(element=>element.price*element.amount).reduce((a,b)=>{return a+b})
+        sum = sum.toFixed(2)
     }
     document.getElementById("field_sum").innerHTML = sum + " zł"
 }
 
-function generateNewRowByObject(element){
+function createRow(element){
     let tr = document.createElement("tr")
     
     
@@ -39,9 +38,9 @@ function generateNewRowByObject(element){
     //ustawienie poprawnych wartości pobranych z elementu
     tdLp.innerHTML = element.lp
     tdName.innerHTML = element.name
-    tdPrice.innerHTML = element.price
+    tdPrice.innerHTML = element.price.toFixed(2) + " zł"
     tdAmount.innerHTML = element.amount
-    tdCost.innerHTML = element.price* element.amount
+    tdCost.innerHTML = (element.price*element.amount).toFixed(2)
     tdControlls.appendChild(getControlsDiv())
 
     // Nadanie odpowiednich klas
@@ -68,25 +67,20 @@ function generateNewRowByObject(element){
     tr.appendChild(tdControlls)
 
     tr.onclick = (event) => {
-        let up = "Up"
-        let down = "Down"
-        let edit = "Edytuj"
-        let del = "Usuń"
-
         let index = parseInt(tr.children[0].innerHTML) 
-        if(event.target.value==up){
-            if(index == 1) return
+        if(event.target.id==="button-up"){
+            if(index === 1) return
             swapElementsByIndexes(index-1,index-2)
             updateLocalStorage()
             update()
         }
-        else if(event.target.value==down){
-            if(index == storage.length) return
+        else if(event.target.id==="button-down"){
+            if(index === storage.length) return
             swapElementsByIndexes(index-1,index)
             updateLocalStorage()
             update()
         }
-        else if(event.target.value==edit){
+        else if(event.target.id==="button-edit"){
             let element = storage[index-1]
             storage.splice(index-1,1)
             update()
@@ -94,7 +88,7 @@ function generateNewRowByObject(element){
             document.getElementById("text-add-name").value = element.name
             document.getElementById("text-add-price").value = element.price
             document.getElementById("text-add-amount").value = element.amount
-            
+
             document.getElementById("text-submit").hidden = true
             document.getElementById("text-update-cancel").hidden = false
             document.getElementById("text-update").hidden =false
@@ -107,7 +101,7 @@ function generateNewRowByObject(element){
             document.getElementById("text-update").onclick = updateButtonOnClick
 
         }
-        else if(event.target.value==del){
+        else if(event.target.id==="button-delete"){
             storage.splice(index-1,1)
             updateLocalStorage()
             update()
@@ -120,7 +114,7 @@ function updateButtonOnClick(){
     document.getElementById("text-submit").hidden = false
     document.getElementById("text-update-cancel").hidden = true
     document.getElementById("text-update").hidden =true
-    addButtonOnCLickListener()
+    addNewObjectFromForm()
 }
 
 function cancelButtonOnClick(element){
@@ -130,7 +124,7 @@ function cancelButtonOnClick(element){
 
     storage.push(element)
     update()
-    clearAddForm()
+    resetForm()
 }
 
 function swapElementsByIndexes(indexA,indexB){
@@ -140,39 +134,38 @@ function swapElementsByIndexes(indexA,indexB){
 }
 
 function getControlsDiv(){
-    let up = "Up"
-    let down = "Down"
-    let edit = "Edytuj"
-    let del = "Usuń"
-
     let span = document.createElement("span")
     let buttonEdit = document.createElement("input")
     buttonEdit.type= "button"
-    buttonEdit.value=edit
+    buttonEdit.id="button-edit"
+    buttonEdit.classList.add("control-buttons")
     span.appendChild(buttonEdit)
 
     let buttonDelete = document.createElement("input")
     buttonDelete.type= "button"
-    buttonDelete.value=del
+    buttonDelete.id="button-delete"
+    buttonDelete.classList.add("control-buttons")
     buttonDelete.style.marginLeft="10px"
     span.appendChild(buttonDelete)
 
     let buttonUp = document.createElement("input")
     buttonUp.type= "button"
-    buttonUp.value=up
+    buttonUp.id="button-up"
+    buttonUp.classList.add("control-buttons")
     buttonUp.style.marginLeft="10px"
     span.appendChild(buttonUp)
 
     let buttonDown = document.createElement("input")
     buttonDown.type= "button"
-    buttonDown.value=down
+    buttonDown.id="button-down"
+    buttonDown.classList.add("control-buttons")
     buttonDown.style.marginLeft="10px"
     span.appendChild(buttonDown)
 
     return span    
 }
 
-function addButtonOnCLickListener(){
+function addNewObjectFromForm(){
     let newObject = {}
     newObject.name = document.getElementById("text-add-name").value
     newObject.price = document.getElementById("text-add-price").value
@@ -186,9 +179,8 @@ function addButtonOnCLickListener(){
         alert("Wprowadzono błędne dane!")
     } else {
         newObject.price = parseFloat(newObject.price)
-        newObject.amount=parseFloat(newObject.amount)
+        newObject.amount=parseInt(newObject.amount)
     }
-
 
     if (newObject.name.length === 0 ||
         newObject.price<=0 ||
@@ -204,7 +196,7 @@ function addButtonOnCLickListener(){
         storage.push(newObject)
         updateLocalStorage()
         update()
-        clearAddForm()
+        resetForm()
     }
 }
 
@@ -212,7 +204,7 @@ function updateLocalStorage(){
     localStorage["storage"] = JSON.stringify(storage)
 }
 
-function clearAddForm(){
+function resetForm(){
     document.getElementById("text-add-name").value = ""
     document.getElementById("text-add-price").value = ""
     document.getElementById("text-add-amount").value = ""
@@ -221,7 +213,7 @@ function clearAddForm(){
 window.onload = function (){
     // inicjalizacja przycisku dodawania
     let button = document.getElementById("text-submit")
-    button.onclick = addButtonOnCLickListener
+    button.onclick = addNewObjectFromForm
 
     // pobranie danych z local storage
     storage = JSON.parse(localStorage["storage"] || "[]")
