@@ -1,3 +1,7 @@
+*{
+    font-family: "Comic Sans MS";
+}
+
 td{
     border: 1px solid #ddd;
     margin:0px;
