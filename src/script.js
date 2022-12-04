@@ -1,54 +1,48 @@
-var currencySuffix = " zł"
-
-var storage = [{
-    lp:10,
-    name:"nazwa4",
-    price:123,
-    amount:103
-},{
-    lp:20,
-    name:"nazwa3",
-    price:23,
-    amount:102
-},{
-    lp:20,
-    name:"nazwa2",
-    price:13,
-    amount:1011
-},{
-    lp:20,
-    name:"nazwa1",
-    price:1,
-    amount:101
-}]
+let storage = [{
+    lp: 10,
+    name: "nazwa4",
+    price: 123,
+    amount: 103
+}, {
+    lp: 20,
+    name: "nazwa3",
+    price: 23,
+    amount: 102
+}, {
+    lp: 20,
+    name: "nazwa2",
+    price: 13,
+    amount: 1011
+}, {
+    lp: 20,
+    name: "nazwa1",
+    price: 1,
+    amount: 101
+}];
 
 function update(){
-    clearList()
-    reenumerateStorage()
-    generateListFromStorage()
-    setContentSumaTextView( sumElementsOnList())
-}
+    // wyczyszczenie listy
+    let list = document.getElementsByClassName("table-row")
+    while( list.length>0) list[0].remove()
 
-function getSumaTextView(){
-    return document.getElementById("field_sum")
-}
+    // wygenerowanie nowej numeracji
+    for(let i =0;i<storage.length;i++){
+        storage[i].lp=i+1
+    }
 
-function setContentSumaTextView(content){
-    
-    getSumaTextView().innerHTML = content+currencySuffix
-}
-
-function sumElementsOnList(){
-    let sum = 0
-    if(storage.length == 0) return 0.0
-    sum = storage.map(element=>element.price*element.amount).reduce((a,b)=>{return a+b})
-    return sum
-}
-
-function generateListFromStorage(){
+    // wygenerowanie nowej listy z storage
     storage.forEach(element=>{
         generateNewRowByObject(element)
     })
+
+    // ustawienie sumy
+    let sum
+    if(storage.length === 0) {
+        sum = 0.0
+    } else {
+        sum = storage.map(element=>element.price*element.amount).reduce((a,b)=>{return a+b})
+    }
+    document.getElementById("field_sum").innerHTML = sum + " zł"
 }
 
 function generateNewRowByObject(element){
@@ -69,7 +63,7 @@ function generateNewRowByObject(element){
     tdPrice.innerHTML = element.price
     tdAmount.innerHTML = element.amount
     tdCost.innerHTML = element.price* element.amount
-    tdControlls.appendChild(getControllsDiv())
+    tdControlls.appendChild(getControlsDiv())
 
     // Nadanie odpowiednich klas
     tr.classList.add("table-row")
@@ -131,8 +125,11 @@ function generateNewRowByObject(element){
             document.getElementById("text-update").hidden =false
 
 
-            document.getElementById("text-update-cancel").onclick =  function (){cancelButtonOnClickListener(element)}
-            document.getElementById("text-update").onclick =updateButtonOnClickListener
+            document.getElementById("text-update-cancel").onclick = function () {
+                cancelButtonOnClick(element)
+            }
+
+            document.getElementById("text-update").onclick = updateButtonOnClick
 
         }
         else if(event.target.value==del){
@@ -145,13 +142,14 @@ function generateNewRowByObject(element){
 
 }
 
-function updateButtonOnClickListener(){
+function updateButtonOnClick(){
     document.getElementById("text-submit").hidden = false
     document.getElementById("text-update-cancel").hidden = true
     document.getElementById("text-update").hidden =true
     addButtonOnCLickListener()
 }
-function cancelButtonOnClickListener(element){
+
+function cancelButtonOnClick(element){
     document.getElementById("text-submit").hidden = false
     document.getElementById("text-update-cancel").hidden = true
     document.getElementById("text-update").hidden =true
@@ -168,11 +166,11 @@ function swapElementsByIndexes(indexA,indexB){
     storage[indexB] = temp
 }
 
-function getControllsDiv(){
+function getControlsDiv(){
     let up = "Up"
     let down = "Down"
     let edit = "Edytuj"
-    let del = "Usuń" //WARN: redeklaracja wyżej - muszą się zgadzać
+    let del = "Usuń"
 
     let span = document.createElement("span")
     let buttonEdit = document.createElement("input")
@@ -203,24 +201,10 @@ function getControllsDiv(){
 
 function addTableCellAsLast(tableCellElement){
     let pointer = document.getElementById("table-row-add")
-       
     pointer.parentElement.insertBefore(tableCellElement,pointer)
-
 }
 
-function insertAfter(referenceNode, newNode) {
-    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
-  }
 
-function clearList(){
-    let list = document.getElementsByClassName("table-row")
-    while( list.length>0) list[0].remove()
-}
-function reenumerateStorage(){
-    for(let i =0;i<storage.length;i++){
-        storage[i].lp=i+1
-    }
-}
 
 function addButtonInit(){
     let button = document.getElementById("text-submit")
