@@ -57,6 +57,13 @@ span input {
     margin-left: 10px;
 }
 
+.table-add-text {
+    font-size: 19px;
+    border: 2px solid lightgrey;
+    border-radius: 19px;
+    padding: 0 10px;
+}
+
 #table-main td {
     padding: 3px;
     padding-top: 12px;
@@ -100,5 +107,16 @@ span input {
 
 #button-add{
     background: url(Icons/add.png) no-repeat;
+    background-size: 30px;
+    margin-left: 30px;
+}
+
+#button-confirm{
+    background: url(Icons/confirm.png) no-repeat;
+    background-size: 30px;
+}
+
+#button-cancel{
+    background: url(Icons/cancel.png) no-repeat;
     background-size: 30px;
 }

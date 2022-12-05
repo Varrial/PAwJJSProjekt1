@@ -89,16 +89,16 @@ function createRow(element){
             document.getElementById("text-add-price").value = element.price
             document.getElementById("text-add-amount").value = element.amount
 
-            document.getElementById("text-submit").hidden = true
-            document.getElementById("text-update-cancel").hidden = false
-            document.getElementById("text-update").hidden =false
+            document.getElementById("button-add").hidden = true
+            document.getElementById("button-cancel").hidden = false
+            document.getElementById("button-confirm").hidden =false
 
 
-            document.getElementById("text-update-cancel").onclick = function () {
+            document.getElementById("button-cancel").onclick = function () {
                 cancelButtonOnClick(element)
             }
 
-            document.getElementById("text-update").onclick = updateButtonOnClick
+            document.getElementById("button-confirm").onclick = updateButtonOnClick
 
         }
         else if(event.target.id==="button-delete"){
@@ -111,16 +111,16 @@ function createRow(element){
 }
 
 function updateButtonOnClick(){
-    document.getElementById("text-submit").hidden = false
-    document.getElementById("text-update-cancel").hidden = true
-    document.getElementById("text-update").hidden =true
+    document.getElementById("button-add").hidden = false
+    document.getElementById("button-cancel").hidden = true
+    document.getElementById("button-confirm").hidden =true
     addNewObjectFromForm()
 }
 
 function cancelButtonOnClick(element){
-    document.getElementById("text-submit").hidden = false
-    document.getElementById("text-update-cancel").hidden = true
-    document.getElementById("text-update").hidden =true
+    document.getElementById("button-add").hidden = false
+    document.getElementById("button-cancel").hidden = true
+    document.getElementById("button-confirm").hidden =true
 
     storage.push(element)
     update()
@@ -212,7 +212,7 @@ function resetForm(){
 
 window.onload = function (){
     // inicjalizacja przycisku dodawania
-    let button = document.getElementById("text-submit")
+    let button = document.getElementById("button-add")
     button.onclick = addNewObjectFromForm
 
     // pobranie danych z local storage
